@@ -1,56 +1,77 @@
 import { useState } from "react";
-import Quest from "./Quest";
-import QuestForm from "./QuestForm";
+import StarRating from "../components/StarRating";
+import {
+    AiFillCloseSquare,
+    AiFillEdit,
+    AiFillCheckCircle,
+} from "react-icons/ai";
 
-const QuestList = () => {
-    const [quests, setQuests] = useState([])
+const QuestList = ({ items, onItemUpdate, onItemDelete, onToggleChecked }) => {
 
-    const addQuest = quest => {
-        if(!quest.text || /^\s*$/.test(quest.text)) {
-            return;
-        }
+    const [editingItem, setEditingItem] = useState({});
 
-        const newQuests = [quest, ...quests];
-        
-        setQuests(newQuests);
-    };
-    
-    const editQuest = (questId, newValue) => {
-        if(!newValue.text || /^\s*$/.test(newValue.text)) {
-            return;
-        }
-
-        setQuests(prev => prev.map(item => (item.id === questId ? newValue : item)));
-    };
-
-
-    const removeQuest = id => {
-        const removeArray = [...quests].filter(quest => quest.id !== id)
-        setQuests(removeArray);
-    };
-
-
-    const completeQuest = id => {
-        let updatedQuests = quests.map(quest => {
-            if (quest.id === id) {
-                quest.isComplete = !quest.isComplete;
-            }
-            return quest;
-        });
-        setQuests(updatedQuests);
-    };
-
-    return (
+    const renderSavedItem = (item, key) => {
+        return (
+        <li
+            key={key}
+            className="quest-card"
+        >
         <div>
-            <QuestForm onSubmit={addQuest}/>
-            <Quest 
-                quests={quests}
-                completeQuest={completeQuest}
-                removeQuest={removeQuest}
-                editQuest={editQuest}    
+            <span className={item.completed ? "strike" : ""}>
+                {item.name}
+            </span>
+            <AiFillEdit 
+                className="edit-icon"
+                onClick={() => setEditingItem(item)}
+            />
+            <AiFillCheckCircle 
+                className="check-icon"
+                onClick={() => onToggleChecked(item)}
+            />
+            <AiFillCloseSquare 
+                className="delete-icon"
+                onClick={() => onItemDelete(item.id)}
             />
         </div>
+            <StarRating value={item.rating} />
+        </li>
+        );
+    };
+
+    const renderEditingItem = (item, key) => (
+        <li
+            key={key} 
+            className="edit-quest-card"
+        >
+            <div>
+                <input 
+                className="quest-input"
+                type="text"
+                placeholder="Add a quest..."
+                value={item.name}
+                onChange={event => onItemUpdate({...item, name: event.target.value})}
+            />
+            <button onClick={() => setEditingItem({})}>
+                Update
+            </button>
+            </div>
+            <StarRating
+                value={item.rating}
+                onChange={value => onItemUpdate({...item, rating: value})}
+            />
+        </li>
+    );
+
+    const listItems = items.map((item, index) => 
+        editingItem.name
+            ? renderEditingItem(item, index)
+            : renderSavedItem(item, index));
+
+    return ( 
+        <ul className="quest-list">
+            {listItems}
+        </ul>
      );
-}
+};
  
 export default QuestList;

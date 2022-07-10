@@ -1,35 +1,39 @@
 import { useState } from "react";
 import StarRating from "./StarRating";
 
-const QuestForm = (props) => {
-    const [input, setInput] = useState('');
-
-    const handleChange = event => {
-        setInput(event.target.value);
-    };
+const QuestForm = ({ onCreateQuest }) => {
+    const [questName, setQuestName] = useState('');
+    const [rating, setRating] = useState(0);
 
     const handleSubmit = event => {
         event.preventDefault();
 
-        props.onSubmit({
-            id: Math.floor(Math.random() * 99999999),
-            text: input
-        });
+        if(! questName ) return
 
-        setInput("");
+        const newQuest = {
+            id: Date.now(),
+            name: questName,
+            rating,
+            completed: false,
+        };
+
+        onCreateQuest(newQuest);
+        setQuestName("");
     };
     
     return ( 
         <form className="quest-form" onSubmit={handleSubmit}>
-            <input 
-                className="quest-input"
-                type="text"
-                placeholder="Add a quest..."
-                value={input}
-                onChange={handleChange}
-            />
-            {/* <StarRating value={StarRating.ratingValue}/> */}
-            <button className="setquest-button">Set Quest</button>
+            <div className="quest-column">
+                <input 
+                    className="quest-input"
+                    type="text"
+                    placeholder="Add a quest..."
+                    value={questName}
+                    onChange={event => setQuestName(event.target.value)}
+                />
+                <StarRating value={rating} onChange={setRating} />
+            </div>
+            <button type="submit" className="setquest-button">Set Quest</button>
         </form>
      );
 }
