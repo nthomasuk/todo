@@ -134,6 +134,7 @@ input[type="radio"] {
   padding-top: 10px;
   padding-bottom: 10px;
   border-radius: 0.8em;
+  margin-bottom: 15px;
 }
 
 .quest-card-header {
