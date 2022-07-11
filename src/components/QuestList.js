@@ -16,10 +16,13 @@ const QuestList = ({ items, onItemUpdate, onItemDelete, onToggleChecked }) => {
             key={key}
             className="quest-card"
         >
-        <div>
+        <div className="quest-card-header">
             <span className={item.completed ? "strike" : ""}>
                 {item.name}
             </span>
+            <StarRating value={item.rating} />
+        </div>
+        <div className="icons">
             <AiFillEdit 
                 className="edit-icon"
                 onClick={() => setEditingItem(item)}
@@ -33,7 +36,6 @@ const QuestList = ({ items, onItemUpdate, onItemDelete, onToggleChecked }) => {
                 onClick={() => onItemDelete(item.id)}
             />
         </div>
-            <StarRating value={item.rating} />
         </li>
         );
     };

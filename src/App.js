@@ -63,9 +63,9 @@ const App = () => {
       </div>
       <div className="summary">
         <p>Items: {quests.length}</p>
-        <p>Total Ratings: {summary.ratings}</p>
-        <p>Total Complete: {summary.complete}</p>
+        <p>Total Complete: {summary.completed}</p>
         <p>Total Incomplete: {summary.incomplete}</p>
+        <p>Total Ratings: {summary.ratings}</p>
       </div>
       <div className="Content">
         <QuestForm onCreateQuest={handleCreateQuest} />
